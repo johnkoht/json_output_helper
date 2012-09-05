@@ -65,9 +65,9 @@ module JsonOutputHelper
   def json_model model, extra_params={}
     # By default, we use the api_attributes method to return model properties. A custom
     # attributes parameter can be passed also
-    method = extra_params[:attributes] || "api_attributes"
     if model.errors.empty?
-      render :json => model.send(method).deep_merge(extra_params)
+      m = model.send(extra_params[:attributes] || "api_attributes")
+      render :json => {"#{model.class.name.underscore}" => m}.merge(extra_params.except(:attributes))
     else 
       json_error :model_error, model.errors.first.join(' ')
     end
@@ -78,8 +78,12 @@ module JsonOutputHelper
   def json_models models, extra_params={}
     # By default, we use the api_attributes method to return model properties. A custom
     # attributes parameter can be passed also
-    method = extra_params[:attributes] || "api_attributes"
-    render :json => models.collect{|model| model.send(method)}.merge(extra_params)
+    if models.present?
+      m = models.collect{|model| model.send(extra_params[:attributes] || "api_attributes")}
+      render :json => {payload: m}.merge(extra_params.except(:attributes))
+    else
+      render :json => extra_params.except(:attributes)
+    end
   end
   
   
