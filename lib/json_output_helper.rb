@@ -62,12 +62,12 @@ module JsonOutputHelper
   
   # a standard way to return models. if they have errors then we return the error message
   # this is a DRY approach to creating and updating and then returning JSON responses
-  def json_model model, extra_params={}
+  def json_model model, hash={}
     # By default, we use the api_attributes method to return model properties. A custom
     # attributes parameter can be passed also
     method = extra_params[:attributes] || "api_attributes"
     if model.errors.empty?
-      render :json => model.send(method).deep_merge(extra_params)
+      render :json => model.send(method).deep_merge(hash)
     else 
       json_error :model_error, model.errors.first.join(' ')
     end
@@ -75,11 +75,11 @@ module JsonOutputHelper
 
   # a standard way to return an array of models
   # arrays of models are passed back in a data object, this is so we can add things we may need in the future such as pagination
-  def json_models models, extra_params={}
+  def json_models models, hash={}
     # By default, we use the api_attributes method to return model properties. A custom
     # attributes parameter can be passed also
     method = extra_params[:attributes] || "api_attributes"
-    render :json => models.collect{|model| model.send(method)} 
+    render :json => models.collect{|model| model.send(method)}.deep_merge(hash)
   end
   
   
