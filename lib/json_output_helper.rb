@@ -65,7 +65,7 @@ module JsonOutputHelper
   def json_model model, hash={}
     # By default, we use the api_attributes method to return model properties. A custom
     # attributes parameter can be passed also
-    method = extra_params[:attributes] || "api_attributes"
+    method = hash[:attributes] || "api_attributes"
     if model.errors.empty?
       render :json => model.send(method).deep_merge(hash)
     else 
@@ -78,7 +78,7 @@ module JsonOutputHelper
   def json_models models, hash={}
     # By default, we use the api_attributes method to return model properties. A custom
     # attributes parameter can be passed also
-    method = extra_params[:attributes] || "api_attributes"
+    method = hash[:attributes] || "api_attributes"
     render :json => models.collect{|model| model.send(method)}.deep_merge(hash)
   end
   
