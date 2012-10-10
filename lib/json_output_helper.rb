@@ -67,7 +67,7 @@ module JsonOutputHelper
     # attributes parameter can be passed also
     if model.errors.empty?
       m = model.send(extra_params[:attributes] || "api_attributes")
-      render :json => {"#{model.class.name.underscore}" => m}.merge(extra_params.except(:attributes))
+      render :json => {"#{model.class.name.downcase.underscore}" => m}.merge(extra_params.except(:attributes))
     else 
       json_error :model_error, model.errors.first.join(' ')
     end
@@ -79,8 +79,9 @@ module JsonOutputHelper
     # By default, we use the api_attributes method to return model properties. A custom
     # attributes parameter can be passed also
     if models.present?
-      m = models.collect{|model| model.send(extra_params[:attributes] || "api_attributes")}
-      render :json => {payload: m}.merge(extra_params.except(:attributes))
+      m = models.collect{|model| model.send(extra_params[:attributes] || "api_attributes").merge({:_class_name => model.class.name.downcase.pluralize})}.group_by{|d| d[:_class_name] }
+      
+      render :json => m.merge(extra_params.except(:attributes))
     else
       render :json => extra_params.except(:attributes)
     end
