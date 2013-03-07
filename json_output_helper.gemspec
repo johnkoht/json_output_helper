@@ -5,10 +5,10 @@
 
 Gem::Specification.new do |s|
   s.name = %q{json_output_helper}
-  s.version = "0.2.4"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Craig Ulliott"]
+  s.authors = ["Craig Ulliott", "John Koht", "Justin McNally"]
   s.date = %q{2011-05-24}
   s.description = %q{ActionController helper to normalize JSON output}
   s.email = %q{craigulliott@gmail.com}
